@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jewellery 818 | Atelier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --velvet-room: #0e0807; /* Deepest brown-black */
+  --burgundy-base: #2a0a08; /* The "Shadow" Burgundy */
+  --wine-core: #4a100d; /* The "Mid-tone" Burgundy */
+  --antique-gold: #b89a72;
+  --light-beam: rgba(255, 235, 200, 0.07);
+  --dust: rgba(243, 237, 227, 0.04);
+}
+
+/* ─── TACTILE TEXTURE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.12; /* "Barely visible" texture */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23f)'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+body {
+  background-color: var(--velvet-room);
+  color: var(--antique-gold);
+  font-family: 'EB Garamond', serif;
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── VOLUMETRIC DAWN (LIGHT SLICING THE ROOM) ─── */
+#volumetric-light {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: 
+    linear-gradient(115deg, 
+      transparent 10%, 
+      var(--light-beam) 40%, 
+      rgba(255, 220, 170, 0.12) 50%, 
+      var(--light-beam) 60%, 
+      transparent 90%);
+  filter: blur(80px);
+  transform: scale(1.5);
+  opacity: 0.3;
+  transition: opacity 2s ease;
+}
+
+/* ─── LUXURY LOADER (PERFUME AD STYLE) ─── */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.loader-content {
+  text-align: center;
+  opacity: 0;
+  animation: fadeInOut 3.5s ease forwards;
+}
+.loader-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.5em;
+  color: var(--antique-gold);
+  text-transform: uppercase;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(10px); }
+  30% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; width: 100%;
+  padding: 2.5rem 6vw;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1000;
+}
+.nav-brand { font-family: 'Cinzel'; font-size: 0.9rem; letter-spacing: 0.3em; }
+
+/* ─── HERO ─── */
+#hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 10vw;
+  position: relative;
+  background: radial-gradient(circle at 70% 30%, var(--burgundy-base) 0%, transparent 70%);
+}
+.hero-text { max-width: 500px; z-index: 2; }
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 400;
+  line-height: 0.9;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+.hero-title span { display: block; color: var(--antique-gold); font-size: 0.5em; margin-top: 1rem;}
+
+/* ─── STAGGERED EDITORIAL GRID ─── */
+.editorial-grid {
+  padding: 10vh 6vw;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+}
+
+.card {
+  grid-column: span 5;
+  margin-bottom: 15vh;
+  position: relative;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Staggering Logic */
+.card:nth-child(even) { grid-column: 7 / span 5; margin-top: 10vh; }
+.card:nth-child(odd) { grid-column: 2 / span 5; }
+
+.image-wrap {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: var(--wine-core);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 60px -12px rgba(0,0,0,0.7);
+}
+
+.image-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0.8;
+  filter: sepia(0.2) contrast(1.1);
+  transition: transform 1.5s ease;
+}
+
+.card:hover img { transform: scale(1.05); }
+
+.card-meta {
+  margin-top: 1.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+.card-title {
+  display: block;
+  font-family: 'Cinzel';
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── THE THIN CHAIN (Subtle Interaction) ─── */
+#gold-chain {
+  position: fixed;
+  right: 10vw;
+  top: -10vh;
+  width: 1px;
+  height: 120vh;
+  background: linear-gradient(to bottom, transparent, var(--antique-gold), transparent);
+  opacity: 0.2;
+  z-index: 5;
+  pointer-events: none;
+}
+
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-content">
+    <div class="loader-logo">Jewellery 818</div>
+  </div>
+</div>
+
+<div id="volumetric-light"></div>
+<div id="gold-chain"></div>
+
+<nav>
+  <div class="nav-brand">JEWELLERY 818</div>
+  <div class="nav-brand" style="font-size: 0.6rem;">ATELIER NAIROBI</div>
+</nav>
+
+<section id="hero">
+  <div class="hero-text">
+    <h1 class="hero-title">Worn Close. <span>Kept Forever.</span></h1>
+    <p style="font-style: italic; opacity: 0.6; letter-spacing: 0.05em;">Handcrafted pieces that catch the morning light.</p>
+  </div>
+</section>
+
+<section class="editorial-grid">
+  <div class="card reveal">
+    <div class="image-wrap">
+       <div style="width:100%; height:100%; background: radial-gradient(circle at center, #5e1914, #1a0807);"></div>
+    </div>
+    <div class="card-meta">
+      <span class="card-title">The Teardrop</span>
+      <span>KES 1,800</span>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <div class="image-wrap" style="aspect-ratio: 1/1;">
+       <div style="width:100%; height:100%; background: radial-gradient(circle at center, #4a100d, #0e0807);"></div>
+    </div>
+    <div class="card-meta">
+      <span class="card-title">Ruby Kiss Bracelet</span>
+      <span>KES 2,500</span>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─── SLOW VOLUMETRIC SCROLL ───
+window.addEventListener('scroll', () => {
+  const scrollPos = window.scrollY;
+  const light = document.getElementById('volumetric-light');
+  // Light intensity shifts as you scroll deep into the room
+  const opacity = 0.3 + (scrollPos / 3000);
+  light.style.opacity = Math.min(opacity, 0.6);
+  // Subtle diagonal movement
+  light.style.transform = `scale(1.5) translate(${scrollPos * 0.05}px, ${scrollPos * 0.02}px)`;
+});
+
+// ─── LOADER DISMISS ───
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').style.transition = 'opacity 1.5s ease';
+    document.getElementById('loader').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+    }, 1500);
+  }, 3500);
+});
+
+// ─── REVEAL OBSERVER ───
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = "1";
+      entry.target.style.transform = "translateY(0)";
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.card').forEach(card => {
+  card.style.opacity = "0";
+  card.style.transform = "translateY(40px)";
+  observer.observe(card);
+});
+</script>
+
+</body>
+  </html>
+  
