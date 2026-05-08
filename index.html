@@ -64,432 +64,6 @@
 <script src="script.js"></script>
 </body>
 </html>
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 18px;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Analog grain — imperfection is atmosphere */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 990;
-  pointer-events: none;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-  mix-blend-mode: overlay;
-}
-
-/* Velvet micro-fiber texture */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 989;
-  pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='4' fill='rgba(90,15,35,0.9)'/%3E%3C/svg%3E");
-  background-size: 4px 4px;
-  mix-blend-mode: soft-light;
-}
-
-/* ══════════════════════════════════
-   DIRECTIONAL ROOM LIGHT
-   Warm light entering from upper-right
-   like dawn through tall curtains.
-   Scroll reveals it gradually.
-══════════════════════════════════ */
-#roomlight {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.rl-base {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 100% 70% at 85% -15%, rgba(43,15,23,0.85) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 80% at 5% 100%, rgba(17,11,14,1) 0%, transparent 65%),
-    linear-gradient(170deg, #130b0f 0%, #09060a 100%);
-}
-/* Main light shaft — soft diagonal */
-.rl-ray {
-  position: absolute;
-  top: -25%;
-  right: -8%;
-  width: 60%;
-  height: 140%;
-  background: linear-gradient(
-    205deg,
-    rgba(230,195,140,0.000) 0%,
-    rgba(230,195,140,0.018) 28%,
-    rgba(230,195,140,0.065) 46%,
-    rgba(230,195,140,0.028) 62%,
-    rgba(230,195,140,0.000) 100%
-  );
-  filter: blur(45px);
-  transform-origin: 100% 0%;
-  opacity: 0;
-  will-change: opacity, transform;
-}
-/* Secondary diffusion */
-.rl-glow {
-  position: absolute;
-  top: -20%;
-  right: 8%;
-  width: 42%;
-  height: 110%;
-  background: linear-gradient(
-    220deg,
-    rgba(190,130,70,0.000) 0%,
-    rgba(190,130,70,0.012) 38%,
-    rgba(190,130,70,0.038) 54%,
-    rgba(190,130,70,0.000) 72%
-  );
-  filter: blur(65px);
-  transform-origin: 100% 0%;
-  opacity: 0;
-  will-change: opacity;
-}
-/* Floor warmth */
-.rl-floor {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 35%;
-  background: linear-gradient(to top, rgba(43,15,23,0.45) 0%, transparent 100%);
-  pointer-events: none;
-}
-/* Dust motes — visible only when light is strong */
-.rl-dust {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  will-change: opacity, transform;
-  background-image:
-    radial-gradient(circle 1px at 65% 15%, rgba(230,195,140,0.5) 0%, transparent 1px),
-    radial-gradient(circle 1px at 73% 28%, rgba(230,195,140,0.35) 0%, transparent 1px),
-    radial-gradient(circle 1.5px at 61% 42%, rgba(230,195,140,0.28) 0%, transparent 1.5px),
-    radial-gradient(circle 1px at 70% 56%, rgba(230,195,140,0.22) 0%, transparent 1px),
-    radial-gradient(circle 1px at 58% 68%, rgba(230,195,140,0.18) 0%, transparent 1px),
-    radial-gradient(circle 1px at 76% 38%, rgba(230,195,140,0.3) 0%, transparent 1px);
-  animation: dustDrift 14s ease-in-out infinite alternate;
-}
-@keyframes dustDrift {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(-5px, -10px); }
-}
-
-/* ══════════════════════════════════
-   LOADER — Perfume Ad
-══════════════════════════════════ */
-#loader {
-  position: fixed;
-  inset: 0;
-  background: var(--void);
-  z-index: 8000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.ldr-stage {
-  position: relative;
-  width: 200px;
-  height: 140px;
-  margin-bottom: 4rem;
-}
-/* Velvet surface */
-.ldr-velvet {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 72px;
-  background: linear-gradient(175deg, var(--burgundy) 0%, var(--wine) 100%);
-  overflow: hidden;
-}
-.ldr-velvet::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='3'%3E%3Crect width='1.5' height='3' fill='rgba(60,8,20,0.65)'/%3E%3C/svg%3E");
-  background-size: 3px 3px;
-}
-/* Indent shadow where earrings land */
-.ldr-velvet::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100px; height: 14px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 100%);
-  opacity: 0;
-  animation: indentIn 0.5s ease 1.2s forwards;
-}
-@keyframes indentIn { to { opacity: 1; } }
-
-/* Earrings */
-.ldr-ear {
-  position: absolute;
-  opacity: 0;
-  filter: drop-shadow(0 6px 18px rgba(160,124,88,0.35));
-}
-.ldr-ear-1 {
-  left: calc(50% - 22px);
-  animation: earFall 0.75s cubic-bezier(0.3, 0.5, 0.45, 1) 0.5s forwards;
-}
-.ldr-ear-2 {
-  left: calc(50% + 4px);
-  animation: earFall 0.75s cubic-bezier(0.3, 0.5, 0.45, 1) 0.95s forwards;
-}
-@keyframes earFall {
-  0%   { top: -70px; opacity: 0; }
-  55%  { top: 44px; opacity: 1; }
-  72%  { top: 38px; }
-  88%  { top: 42px; }
-  100% { top: 40px; opacity: 1; }
-}
-/* Rising dust */
-.ldr-dust-rise {
-  position: absolute;
-  bottom: 72px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px; height: 30px;
-  opacity: 0;
-  animation: dustRise 2.2s ease 1.3s forwards;
-}
-@keyframes dustRise {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(0); }
-  25%  { opacity: 0.5; }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-28px); }
-}
-.ldr-dp {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(188,156,106,0.65);
-}
-.ldr-dp:nth-child(1) { width:1px;   height:1px;   left:18%; top:70%; }
-.ldr-dp:nth-child(2) { width:1.5px; height:1.5px; left:42%; top:85%; }
-.ldr-dp:nth-child(3) { width:1px;   height:1px;   left:68%; top:55%; }
-.ldr-dp:nth-child(4) { width:1px;   height:1px;   left:32%; top:35%; }
-.ldr-dp:nth-child(5) { width:1.5px; height:1.5px; left:60%; top:75%; }
-
-.ldr-brand {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1rem, 3vw, 1.5rem);
-  font-weight: 300;
-  letter-spacing: 0.38em;
-  color: var(--champagne);
-  opacity: 0;
-  animation: fadeIn 1.4s ease 2s forwards;
-}
-.ldr-brand span { color: var(--wine-mid); }
-.ldr-tagline {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 0.82rem;
-  letter-spacing: 0.22em;
-  color: var(--gold-dim);
-  opacity: 0;
-  margin-top: 0.85rem;
-  animation: fadeIn 1s ease 2.5s forwards;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-.ldr-out { animation: loaderOut 1.3s ease forwards; }
-@keyframes loaderOut { to { opacity: 0; } }
-
-/* ══════════════════════════════════
-   CHAIN — delicate, barely there
-══════════════════════════════════ */
-#chain {
-  position: fixed;
-  left: 4.5vw;
-  top: 0; bottom: 0;
-  width: 20px;
-  z-index: 20;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 2s ease 4.8s;
-}
-#chain.show { opacity: 1; }
-#chainSvg { width: 20px; height: 100%; }
-
-/* ══════════════════════════════════
-   NAV
-══════════════════════════════════ */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 400;
-  padding: 2.2rem 7vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.nav-logo {
-  font-family: 'Cinzel', serif;
-  font-size: 0.78rem;
-  font-weight: 300;
-  letter-spacing: 0.34em;
-  color: var(--champagne);
-  opacity: 0;
-  animation: fadeIn 1s ease 4.2s forwards;
-}
-.nav-logo span { color: var(--wine-mid); }
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 3rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 4.4s forwards;
-}
-.nav-links a {
-  font-family: 'EB Garamond', serif;
-  font-size: 0.73rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold-dim);
-  text-decoration: none;
-  transition: color 0.7s;
-}
-.nav-links a:hover { color: var(--champagne); }
-
-/* ══════════════════════════════════
-   CONTENT
-══════════════════════════════════ */
-#content { position: relative; z-index: 1; }
-
-/* ══════════════════════════════════
-   HERO
-══════════════════════════════════ */
-#hero {
-  min-height: 100vh;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 7vw 14vh;
-  overflow: hidden;
-}
-/* Photo zone — replace with <img> */
-.hero-photo {
-  position: absolute;
-  top: 0; right: 0;
-  width: 60%;
-  height: 100%;
-  background:
-    radial-gradient(ellipse 60% 65% at 52% 38%, rgba(70,20,32,0.5) 0%, transparent 65%),
-    radial-gradient(ellipse 45% 45% at 78% 72%, rgba(43,15,23,0.55) 0%, transparent 55%),
-    linear-gradient(155deg, rgba(26,14,19,0.92) 0%, rgba(9,6,10,1) 75%);
-  z-index: 0;
-}
-.hero-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to left, transparent 5%, rgba(9,6,10,0.88) 100%);
-}
-/* Deep vignette */
-.hero-vig {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 25%, rgba(9,6,10,0.72) 100%);
-  z-index: 1;
-  pointer-events: none;
-}
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 460px;
-  opacity: 0;
-  transform: translateY(18px);
-  animation: heroIn 1.8s ease 4.1s forwards;
-}
-@keyframes heroIn { to { opacity:1; transform:none; } }
-.hero-kicker {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-.hero-kicker::before {
-  content: '';
-  width: 20px; height: 1px;
-  background: var(--wine-mid);
-  opacity: 0.6;
-  flex-shrink: 0;
-}
-.hero-kicker span {
-  font-family: 'EB Garamond', serif;
-  font-style: italic;
-  font-size: 0.78rem;
-  letter-spacing: 0.3em;
-  color: var(--wine-mid);
-  text-transform: uppercase;
-}
-.hero-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(3rem, 8vw, 6.5rem);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: 0.02em;
-  color: var(--cream);
-  display: block;
-}
-.hero-num {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1rem, 2.5vw, 1.9rem);
-  font-weight: 300;
-  letter-spacing: 0.26em;
-  color: var(--gold);
-  display: block;
-  margin-top: 0.35em;
-  margin-bottom: 2.8rem;
-}
-.hero-body {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: clamp(1rem, 1.7vw, 1.18rem);
-  font-weight: 300;
-  line-height: 1.88;
-  color: var(--gold-dim);
-  max-width: 320px;
-  margin-bottom: 3.5rem;
-}
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.9rem;
-  font-family: 'EB Garamond', serif;
-  font-size: 0.76rem;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--champagne);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(160,124,88,0.22);
-  padding-bottom: 0.6rem;
-  transition: color 0.7s, border-color 0.7s;
-}
-.hero-cta:hover { color: var(--cream); border-color: rgba(101,32,46,0.55); }
-.cta-arr { transition: transform 0.6s ease; display: inline-block; }
-.hero-cta:hover .cta-arr { transform: translateX(8px); }
-.hero-scroll-hint {
-  position: absolute;
-  right: 6vw; bottom: 4rem;
-  z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 1rem;
-  opacity: 0;
-  animation: fadeIn 1s ease 5.2s forwards;
-}
-.h-s-txt {
-  writing-mode: vertical-rl;
-  font-size: 0.56rem;
-  letter-spacing: 0.52em;
-  text-transform: uppercase;
   color: var(--gold-dim);
   opacity: 0.4;
 }
@@ -1215,5 +789,71 @@ footer {
   els.forEach(el => obs.observe(el));
 })();
 </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewellery 818 | Editorial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="texture-overlay"></div>
+<div class="velvet-gradient"></div>
+
+<div id="roomlight">
+    <div class="rl-ray"></div>
+    <div class="rl-dust-glow"></div>
+</div>
+
+<canvas id="chainCanvas"></canvas>
+
+<nav class="editorial-nav">
+    <div class="nav-logo">JEWELLERY <span>818</span></div>
+    <div class="nav-right">
+        <button id="box-trigger" onclick="toggleCart()">THE BOX <span id="cart-count">0</span></button>
+    </div>
+</nav>
+
+<main id="lux-scroll">
+    <section id="hero" class="vignette">
+        <div class="hero-content">
+            <div class="hero-kicker"><span>Handcrafted · Nairobi</span></div>
+            <h1 class="hero-title">JEWELLERY <br><span class="num">818</span></h1>
+            <p class="hero-quote"><em>"Pieces made to be worn close to the skin."</em></p>
+        </div>
+    </section>
+
+    <section class="editorial-row L">
+        <div class="image-frame rv">
+            <div class="img-shimmer"></div>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVFs9VXjJjs/" data-instgrm-version="14"></blockquote>
+        </div>
+        <div class="text-block rv d1">
+            <span class="p-idx">COLLECTION I</span>
+            <h2 class="p-name">GOLDEN TEARDROP</h2>
+            <p class="p-desc">An antique gold weight that catches the dawn light. Designed for silence.</p>
+            <button class="add-to-box" onclick="addToCart('Golden Teardrop', 1800)">Add to Box — KES 1,800</button>
+        </div>
+    </section>
+
+    <aside id="cart-sidebar" class="sidebar">
+        <div class="sidebar-inner">
+            <header><h3>Selection</h3><button onclick="toggleCart()">Close</button></header>
+            <div id="cart-items"></div>
+            <footer>
+                <div class="total">Total: <span id="cart-total">KES 0</span></div>
+                <button class="checkout" onclick="checkout()">Inquire via WhatsApp</button>
+            </footer>
+        </div>
+    </aside>
+</main>
+
+<script async src="//www.instagram.com/embed.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
