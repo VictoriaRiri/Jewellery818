@@ -1,39 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jewellery 818</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jewellery 818 | Editorial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-/* ══════════════════════════════════
-   VELVET GOLD — ROOT PALETTE
-   Foundation: deep burgundy
-   Structure:  dark brown-black
-   Illumination: antique gold (behaves like light, not color)
-   Emphasis:   champagne highlights (selective only)
-══════════════════════════════════ */
-:root {
-  --void:      #09060a;
-  --room:      #110b0e;
-  --velvet:    #1a0e13;
-  --burgundy:  #2b0f17;
-  --wine:      #461420;
-  --wine-mid:  #65202e;
-  --gold-dim:  #766050;  /* barely warm gray */
-  --gold:      #a07c58;
-  --gold-warm: #bc9c6a;
-  --champagne: #d8c8ae;
-  --cream:     #ede4d4;
-}
+<div class="texture-overlay"></div>
+<div class="velvet-gradient"></div>
 
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
+<div id="roomlight">
+    <div class="rl-ray"></div>
+    <div class="rl-dust-glow"></div>
+</div>
 
-body {
-  background: var(--void);
-  color: var(--champagne);
+<canvas id="chainCanvas"></canvas>
+
+<nav class="editorial-nav">
+    <div class="nav-logo">JEWELLERY <span>818</span></div>
+    <div class="nav-right">
+        <button id="box-trigger" onclick="toggleCart()">THE BOX <span id="cart-count">0</span></button>
+    </div>
+</nav>
+
+<main id="lux-scroll">
+    <section id="hero" class="vignette">
+        <div class="hero-content">
+            <div class="hero-kicker"><span>Handcrafted · Nairobi</span></div>
+            <h1 class="hero-title">JEWELLERY <br><span class="num">818</span></h1>
+            <p class="hero-quote"><em>"Pieces made to be worn close to the skin."</em></p>
+        </div>
+    </section>
+
+    <section class="editorial-row L">
+        <div class="image-frame rv">
+            <div class="img-shimmer"></div>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVFs9VXjJjs/" data-instgrm-version="14"></blockquote>
+        </div>
+        <div class="text-block rv d1">
+            <span class="p-idx">COLLECTION I</span>
+            <h2 class="p-name">GOLDEN TEARDROP</h2>
+            <p class="p-desc">An antique gold weight that catches the dawn light. Designed for silence.</p>
+            <button class="add-to-box" onclick="addToCart('Golden Teardrop', 1800)">Add to Box — KES 1,800</button>
+        </div>
+    </section>
+
+    <aside id="cart-sidebar" class="sidebar">
+        <div class="sidebar-inner">
+            <header><h3>Selection</h3><button onclick="toggleCart()">Close</button></header>
+            <div id="cart-items"></div>
+            <footer>
+                <div class="total">Total: <span id="cart-total">KES 0</span></div>
+                <button class="checkout" onclick="checkout()">Inquire via WhatsApp</button>
+            </footer>
+        </div>
+    </aside>
+</main>
+
+<script async src="//www.instagram.com/embed.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
   font-family: 'EB Garamond', Georgia, serif;
   font-size: 18px;
   overflow-x: hidden;
