@@ -1,153 +1,1189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velvet Gold | Handcrafted Jewellery</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=EB+Garamond&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jewellery 818</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════
+   VELVET GOLD — ROOT PALETTE
+   Foundation: deep burgundy
+   Structure:  dark brown-black
+   Illumination: antique gold (behaves like light, not color)
+   Emphasis:   champagne highlights (selective only)
+══════════════════════════════════ */
+:root {
+  --void:      #09060a;
+  --room:      #110b0e;
+  --velvet:    #1a0e13;
+  --burgundy:  #2b0f17;
+  --wine:      #461420;
+  --wine-mid:  #65202e;
+  --gold-dim:  #766050;  /* barely warm gray */
+  --gold:      #a07c58;
+  --gold-warm: #bc9c6a;
+  --champagne: #d8c8ae;
+  --cream:     #ede4d4;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--champagne);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Analog grain — imperfection is atmosphere */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 990;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+/* Velvet micro-fiber texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 989;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='4' fill='rgba(90,15,35,0.9)'/%3E%3C/svg%3E");
+  background-size: 4px 4px;
+  mix-blend-mode: soft-light;
+}
+
+/* ══════════════════════════════════
+   DIRECTIONAL ROOM LIGHT
+   Warm light entering from upper-right
+   like dawn through tall curtains.
+   Scroll reveals it gradually.
+══════════════════════════════════ */
+#roomlight {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.rl-base {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 100% 70% at 85% -15%, rgba(43,15,23,0.85) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 80% at 5% 100%, rgba(17,11,14,1) 0%, transparent 65%),
+    linear-gradient(170deg, #130b0f 0%, #09060a 100%);
+}
+/* Main light shaft — soft diagonal */
+.rl-ray {
+  position: absolute;
+  top: -25%;
+  right: -8%;
+  width: 60%;
+  height: 140%;
+  background: linear-gradient(
+    205deg,
+    rgba(230,195,140,0.000) 0%,
+    rgba(230,195,140,0.018) 28%,
+    rgba(230,195,140,0.065) 46%,
+    rgba(230,195,140,0.028) 62%,
+    rgba(230,195,140,0.000) 100%
+  );
+  filter: blur(45px);
+  transform-origin: 100% 0%;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+/* Secondary diffusion */
+.rl-glow {
+  position: absolute;
+  top: -20%;
+  right: 8%;
+  width: 42%;
+  height: 110%;
+  background: linear-gradient(
+    220deg,
+    rgba(190,130,70,0.000) 0%,
+    rgba(190,130,70,0.012) 38%,
+    rgba(190,130,70,0.038) 54%,
+    rgba(190,130,70,0.000) 72%
+  );
+  filter: blur(65px);
+  transform-origin: 100% 0%;
+  opacity: 0;
+  will-change: opacity;
+}
+/* Floor warmth */
+.rl-floor {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to top, rgba(43,15,23,0.45) 0%, transparent 100%);
+  pointer-events: none;
+}
+/* Dust motes — visible only when light is strong */
+.rl-dust {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  will-change: opacity, transform;
+  background-image:
+    radial-gradient(circle 1px at 65% 15%, rgba(230,195,140,0.5) 0%, transparent 1px),
+    radial-gradient(circle 1px at 73% 28%, rgba(230,195,140,0.35) 0%, transparent 1px),
+    radial-gradient(circle 1.5px at 61% 42%, rgba(230,195,140,0.28) 0%, transparent 1.5px),
+    radial-gradient(circle 1px at 70% 56%, rgba(230,195,140,0.22) 0%, transparent 1px),
+    radial-gradient(circle 1px at 58% 68%, rgba(230,195,140,0.18) 0%, transparent 1px),
+    radial-gradient(circle 1px at 76% 38%, rgba(230,195,140,0.3) 0%, transparent 1px);
+  animation: dustDrift 14s ease-in-out infinite alternate;
+}
+@keyframes dustDrift {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(-5px, -10px); }
+}
+
+/* ══════════════════════════════════
+   LOADER — Perfume Ad
+══════════════════════════════════ */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--void);
+  z-index: 8000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.ldr-stage {
+  position: relative;
+  width: 200px;
+  height: 140px;
+  margin-bottom: 4rem;
+}
+/* Velvet surface */
+.ldr-velvet {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 72px;
+  background: linear-gradient(175deg, var(--burgundy) 0%, var(--wine) 100%);
+  overflow: hidden;
+}
+.ldr-velvet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3' height='3'%3E%3Crect width='1.5' height='3' fill='rgba(60,8,20,0.65)'/%3E%3C/svg%3E");
+  background-size: 3px 3px;
+}
+/* Indent shadow where earrings land */
+.ldr-velvet::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 100%);
+  opacity: 0;
+  animation: indentIn 0.5s ease 1.2s forwards;
+}
+@keyframes indentIn { to { opacity: 1; } }
+
+/* Earrings */
+.ldr-ear {
+  position: absolute;
+  opacity: 0;
+  filter: drop-shadow(0 6px 18px rgba(160,124,88,0.35));
+}
+.ldr-ear-1 {
+  left: calc(50% - 22px);
+  animation: earFall 0.75s cubic-bezier(0.3, 0.5, 0.45, 1) 0.5s forwards;
+}
+.ldr-ear-2 {
+  left: calc(50% + 4px);
+  animation: earFall 0.75s cubic-bezier(0.3, 0.5, 0.45, 1) 0.95s forwards;
+}
+@keyframes earFall {
+  0%   { top: -70px; opacity: 0; }
+  55%  { top: 44px; opacity: 1; }
+  72%  { top: 38px; }
+  88%  { top: 42px; }
+  100% { top: 40px; opacity: 1; }
+}
+/* Rising dust */
+.ldr-dust-rise {
+  position: absolute;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px; height: 30px;
+  opacity: 0;
+  animation: dustRise 2.2s ease 1.3s forwards;
+}
+@keyframes dustRise {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(0); }
+  25%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-28px); }
+}
+.ldr-dp {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(188,156,106,0.65);
+}
+.ldr-dp:nth-child(1) { width:1px;   height:1px;   left:18%; top:70%; }
+.ldr-dp:nth-child(2) { width:1.5px; height:1.5px; left:42%; top:85%; }
+.ldr-dp:nth-child(3) { width:1px;   height:1px;   left:68%; top:55%; }
+.ldr-dp:nth-child(4) { width:1px;   height:1px;   left:32%; top:35%; }
+.ldr-dp:nth-child(5) { width:1.5px; height:1.5px; left:60%; top:75%; }
+
+.ldr-brand {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.38em;
+  color: var(--champagne);
+  opacity: 0;
+  animation: fadeIn 1.4s ease 2s forwards;
+}
+.ldr-brand span { color: var(--wine-mid); }
+.ldr-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  color: var(--gold-dim);
+  opacity: 0;
+  margin-top: 0.85rem;
+  animation: fadeIn 1s ease 2.5s forwards;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+.ldr-out { animation: loaderOut 1.3s ease forwards; }
+@keyframes loaderOut { to { opacity: 0; } }
+
+/* ══════════════════════════════════
+   CHAIN — delicate, barely there
+══════════════════════════════════ */
+#chain {
+  position: fixed;
+  left: 4.5vw;
+  top: 0; bottom: 0;
+  width: 20px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease 4.8s;
+}
+#chain.show { opacity: 1; }
+#chainSvg { width: 20px; height: 100%; }
+
+/* ══════════════════════════════════
+   NAV
+══════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 400;
+  padding: 2.2rem 7vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 300;
+  letter-spacing: 0.34em;
+  color: var(--champagne);
+  opacity: 0;
+  animation: fadeIn 1s ease 4.2s forwards;
+}
+.nav-logo span { color: var(--wine-mid); }
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 3rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 4.4s forwards;
+}
+.nav-links a {
+  font-family: 'EB Garamond', serif;
+  font-size: 0.73rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  text-decoration: none;
+  transition: color 0.7s;
+}
+.nav-links a:hover { color: var(--champagne); }
+
+/* ══════════════════════════════════
+   CONTENT
+══════════════════════════════════ */
+#content { position: relative; z-index: 1; }
+
+/* ══════════════════════════════════
+   HERO
+══════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 7vw 14vh;
+  overflow: hidden;
+}
+/* Photo zone — replace with <img> */
+.hero-photo {
+  position: absolute;
+  top: 0; right: 0;
+  width: 60%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 60% 65% at 52% 38%, rgba(70,20,32,0.5) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 78% 72%, rgba(43,15,23,0.55) 0%, transparent 55%),
+    linear-gradient(155deg, rgba(26,14,19,0.92) 0%, rgba(9,6,10,1) 75%);
+  z-index: 0;
+}
+.hero-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to left, transparent 5%, rgba(9,6,10,0.88) 100%);
+}
+/* Deep vignette */
+.hero-vig {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 75% at 50% 50%, transparent 25%, rgba(9,6,10,0.72) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 460px;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroIn 1.8s ease 4.1s forwards;
+}
+@keyframes heroIn { to { opacity:1; transform:none; } }
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.hero-kicker::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--wine-mid);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+.hero-kicker span {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  letter-spacing: 0.3em;
+  color: var(--wine-mid);
+  text-transform: uppercase;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  color: var(--cream);
+  display: block;
+}
+.hero-num {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1rem, 2.5vw, 1.9rem);
+  font-weight: 300;
+  letter-spacing: 0.26em;
+  color: var(--gold);
+  display: block;
+  margin-top: 0.35em;
+  margin-bottom: 2.8rem;
+}
+.hero-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1rem, 1.7vw, 1.18rem);
+  font-weight: 300;
+  line-height: 1.88;
+  color: var(--gold-dim);
+  max-width: 320px;
+  margin-bottom: 3.5rem;
+}
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(160,124,88,0.22);
+  padding-bottom: 0.6rem;
+  transition: color 0.7s, border-color 0.7s;
+}
+.hero-cta:hover { color: var(--cream); border-color: rgba(101,32,46,0.55); }
+.cta-arr { transition: transform 0.6s ease; display: inline-block; }
+.hero-cta:hover .cta-arr { transform: translateX(8px); }
+.hero-scroll-hint {
+  position: absolute;
+  right: 6vw; bottom: 4rem;
+  z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 5.2s forwards;
+}
+.h-s-txt {
+  writing-mode: vertical-rl;
+  font-size: 0.56rem;
+  letter-spacing: 0.52em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  opacity: 0.4;
+}
+.h-s-line {
+  width: 1px; height: 52px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  opacity: 0.22;
+  animation: sPulse 3.5s ease-in-out infinite;
+}
+@keyframes sPulse {
+  0%,100% { opacity:0.12; transform:scaleY(0.65) translateY(-8px); }
+  50%      { opacity:0.35; transform:scaleY(1) translateY(0); }
+}
+
+/* ══════════════════════════════════
+   SECTION BASE
+══════════════════════════════════ */
+.s-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 0.74rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--wine-mid);
+  display: block;
+  margin-bottom: 2rem;
+}
+.s-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.65rem, 4vw, 3.1rem);
+  font-weight: 300;
+  line-height: 1.14;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+}
+.s-title em {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gold);
+}
+.s-body {
+  font-size: 0.99rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.9;
+  color: var(--gold-dim);
+  max-width: 360px;
+}
+
+/* ══════════════════════════════════
+   STATEMENT
+══════════════════════════════════ */
+#statement {
+  padding: 22vh 7vw;
+  min-height: 55vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.stmt-watermark {
+  position: absolute;
+  right: -0.04em; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Cinzel', serif;
+  font-size: 26vw;
+  font-weight: 300;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(70,20,32,0.065);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+.stmt-q {
+  position: relative; z-index: 1;
+  max-width: 620px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.5rem, 3.1vw, 2.35rem);
+  font-weight: 300;
+  line-height: 1.62;
+  color: var(--champagne);
+}
+.stmt-rule {
+  display: block;
+  width: 22px; height: 1px;
+  background: var(--wine-mid);
+  opacity: 0.6;
+  margin-bottom: 2.4rem;
+}
+.stmt-attr {
+  display: block;
+  font-family: 'EB Garamond', serif;
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  opacity: 0.5;
+  margin-top: 2.5rem;
+}
+
+/* ══════════════════════════════════
+   COLLECTIONS — editorial left/right
+   alternating rows, varying ratios
+══════════════════════════════════ */
+#collections { padding: 20vh 0; }
+.col-hd {
+  padding: 0 7vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6vw;
+  align-items: end;
+  margin-bottom: 10vh;
+}
+@media(max-width:680px){ .col-hd { grid-template-columns: 1fr; } }
+
+/* Row wrapper */
+.prow {
+  display: grid;
+  width: 100%;
+  background: var(--room);
+  margin-bottom: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.prow.L { grid-template-columns: 54% 46%; grid-template-areas: "pi pn"; }
+.prow.R { grid-template-columns: 46% 54%; grid-template-areas: "pn pi"; }
+.prow.W { grid-template-columns: 64% 36%; grid-template-areas: "pi pn"; }
+
+@media(max-width:760px){
+  .prow.L,.prow.R,.prow.W {
+    grid-template-columns: 1fr;
+    grid-template-areas: "pi" "pn";
+  }
+}
+
+/* Photo */
+.pi {
+  grid-area: pi;
+  position: relative;
+  overflow: hidden;
+}
+.prow.L .pi { aspect-ratio: 4/5; }
+.prow.R .pi { aspect-ratio: 5/4; }
+.prow.W .pi { aspect-ratio: 16/9; }
+@media(max-width:760px){ .pi { aspect-ratio: 4/3 !important; } }
+
+.pi-inner {
+  position: absolute;
+  inset: 0;
+  transition: transform 1.6s cubic-bezier(0.25,0.1,0.25,1);
+}
+.prow:hover .pi-inner { transform: scale(1.035); }
+
+/* Unique tonal moods */
+.prow:nth-child(1) .pi-inner { background: radial-gradient(ellipse 55% 65% at 45% 52%, #3a1808 0%, #100609 100%); }
+.prow:nth-child(2) .pi-inner { background: radial-gradient(ellipse 60% 60% at 58% 42%, #2a0e1e 0%, #0c060e 100%); }
+.prow:nth-child(3) .pi-inner { background: radial-gradient(ellipse 50% 60% at 42% 58%, #361408 0%, #0e0708 100%); }
+.prow:nth-child(4) .pi-inner { background: radial-gradient(ellipse 62% 55% at 55% 45%, #2e1016 0%, #0c060a 100%); }
+.prow:nth-child(5) .pi-inner { background: radial-gradient(ellipse 52% 60% at 48% 50%, #3a160e 0%, #100809 100%); }
+
+/* Edge fade toward info panel */
+.prow.L .pi::after { content:''; position:absolute; inset:0; background: linear-gradient(to right, transparent 65%, rgba(17,11,14,0.7) 100%); }
+.prow.R .pi::after { content:''; position:absolute; inset:0; background: linear-gradient(to left, transparent 65%, rgba(17,11,14,0.7) 100%); }
+.prow.W .pi::after { content:''; position:absolute; inset:0; background: linear-gradient(to right, transparent 58%, rgba(17,11,14,0.65) 100%); }
+
+/* Info */
+.pn {
+  grid-area: pn;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 4.5vw;
+  background: var(--room);
+  position: relative;
+}
+.prow.L .pn { box-shadow: inset 8px 0 50px rgba(9,6,10,0.9); }
+.prow.R .pn { box-shadow: inset -8px 0 50px rgba(9,6,10,0.9); }
+.prow.W .pn { box-shadow: inset 8px 0 50px rgba(9,6,10,0.9); }
+
+.p-idx {
+  font-family: 'Cinzel', serif;
+  font-size: 0.58rem;
+  font-weight: 300;
+  letter-spacing: 0.26em;
+  color: var(--wine-mid);
+  opacity: 0.42;
+  margin-bottom: 2rem;
+}
+.p-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.82rem, 1.7vw, 1.08rem);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  display: block;
+}
+.p-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.94rem;
+  line-height: 1.78;
+  color: var(--gold-dim);
+  margin-bottom: 1.8rem;
+  display: block;
+  max-width: 210px;
+}
+.p-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 300;
+  color: var(--gold-warm);
+  display: block;
+}
+
+/* ══════════════════════════════════
+   OCCASIONS
+══════════════════════════════════ */
+#occasions { padding: 20vh 7vw; }
+.occ-list { margin-top: 8vh; }
+.occ-row {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr max-content;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid rgba(70,20,32,0.14);
+  align-items: start;
+  transition: padding-left 0.8s ease;
+  position: relative;
+}
+.occ-row::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 0; height: 1px;
+  background: rgba(101,32,46,0.28);
+  transition: width 0.8s ease;
+}
+.occ-row:hover { padding-left: 0.7rem; }
+.occ-row:hover::after { width: 100%; }
+.occ-n {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--wine-mid);
+  opacity: 0.38;
+  padding-top: 0.45rem;
+}
+.occ-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.9rem, 1.9vw, 1.22rem);
+  font-weight: 300;
+  letter-spacing: 0.07em;
+  color: var(--cream);
+  display: block;
+  margin-bottom: 0.6rem;
+}
+.occ-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.93rem;
+  line-height: 1.8;
+  color: var(--gold-dim);
+  max-width: 360px;
+}
+.occ-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.02rem;
+  font-weight: 300;
+  color: var(--gold-warm);
+  text-align: right;
+  padding-top: 0.35rem;
+  white-space: nowrap;
+}
+.occ-price small {
+  display: block;
+  font-family: 'EB Garamond', serif;
+  font-style: normal;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  opacity: 0.4;
+  margin-bottom: 0.22rem;
+}
+@media(max-width:680px){ .occ-row{grid-template-columns:2rem 1fr;} .occ-price{display:none;} }
+
+/* ══════════════════════════════════
+   PRICING
+══════════════════════════════════ */
+#pricing { padding: 20vh 7vw; }
+.price-list { margin-top: 6vh; max-width: 600px; }
+.pr-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(70,20,32,0.1);
+  gap: 2rem;
+  transition: padding-left 0.6s ease;
+}
+.pr-row:hover { padding-left: 0.85rem; }
+.pr-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.73rem;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  flex: 1;
+}
+.pr-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--gold-warm);
+  white-space: nowrap;
+}
+.pr-tag {
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wine-mid);
+  opacity: 0.65;
+}
+
+/* ══════════════════════════════════
+   CONTACT
+══════════════════════════════════ */
+#contact {
+  padding: 22vh 7vw 20vh;
+  min-height: 72vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.contact-wm {
+  position: absolute;
+  right: -0.03em; bottom: -0.14em;
+  font-family: 'Cinzel', serif;
+  font-size: 20vw;
+  font-weight: 300;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(70,20,32,0.045);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.contact-inner { position: relative; z-index: 1; max-width: 560px; }
+.contact-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 5.5vw, 4.4rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: 0.03em;
+  color: var(--cream);
+  margin-bottom: 2rem;
+}
+.contact-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(0.98rem, 1.7vw, 1.15rem);
+  line-height: 1.9;
+  color: var(--gold-dim);
+  max-width: 360px;
+  margin-bottom: 4rem;
+}
+.contact-links { display: flex; flex-wrap: wrap; gap: 0 3rem; }
+.cl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(160,124,88,0.16);
+  padding-bottom: 0.58rem;
+  transition: color 0.7s, border-color 0.7s;
+  margin-bottom: 1.5rem;
+}
+.cl:hover { color: var(--cream); border-color: rgba(101,32,46,0.48); }
+.cl-arr { display: inline-block; transition: transform 0.55s ease; }
+.cl:hover .cl-arr { transform: translate(4px,-3px); }
+.contact-handle {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: var(--wine-mid);
+  margin-top: 1.2rem;
+  opacity: 0.6;
+}
+
+/* ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ */
+footer {
+  padding: 2.5rem 7vw;
+  border-top: 1px solid rgba(70,20,32,0.11);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  position: relative; z-index: 1;
+}
+.fl { font-family:'Cinzel',serif; font-size:0.7rem; font-weight:300; letter-spacing:0.32em; color:var(--gold-dim); opacity:0.4; }
+.fl span { color: var(--wine-mid); }
+.fn { list-style:none; display:flex; gap:2.5rem; }
+.fn a { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-dim); opacity:0.3; text-decoration:none; transition:opacity 0.5s; }
+.fn a:hover { opacity:0.8; }
+.fc { font-size:0.58rem; letter-spacing:0.15em; color:var(--gold-dim); opacity:0.18; }
+
+/* ══════════════════════════════════
+   REVEAL — slow and confident
+══════════════════════════════════ */
+.rv {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.4s ease, transform 1.4s ease;
+}
+.rv.on { opacity:1; transform:none; }
+.d1{transition-delay:0.07s} .d2{transition-delay:0.16s} .d3{transition-delay:0.28s}
+.d4{transition-delay:0.42s} .d5{transition-delay:0.58s} .d6{transition-delay:0.76s}
+
+/* Mobile */
+@media(max-width:768px){ .nav-links{display:none;} #chain{display:none;} }
+
+</style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="loader-content">
-            <h1 class="loader-logo">VELVET GOLD</h1>
-            <div class="loader-bar"></div>
-        </div>
+<!-- LOADER -->
+<div id="loader">
+  <div class="ldr-stage">
+    <!-- Earring 1 -->
+    <svg class="ldr-ear ldr-ear-1" width="26" height="62" viewBox="0 0 26 62" fill="none">
+      <circle cx="13" cy="7" r="4.5" stroke="#bc9c6a" stroke-width="0.9"/>
+      <line x1="13" y1="11.5" x2="13" y2="19" stroke="#a07c58" stroke-width="0.75"/>
+      <ellipse cx="13" cy="27" rx="5.5" ry="7" stroke="#bc9c6a" stroke-width="0.75"/>
+      <path d="M7.5 33 Q7.5 50 13 55 Q18.5 50 18.5 33" stroke="#a07c58" stroke-width="0.75" fill="none"/>
+      <circle cx="13" cy="27" r="1.8" fill="#bc9c6a" opacity="0.55"/>
+    </svg>
+    <!-- Earring 2 -->
+    <svg class="ldr-ear ldr-ear-2" width="26" height="62" viewBox="0 0 26 62" fill="none">
+      <circle cx="13" cy="7" r="4.5" stroke="#bc9c6a" stroke-width="0.9"/>
+      <line x1="13" y1="11.5" x2="13" y2="19" stroke="#a07c58" stroke-width="0.75"/>
+      <ellipse cx="13" cy="27" rx="5.5" ry="7" stroke="#bc9c6a" stroke-width="0.75"/>
+      <path d="M7.5 33 Q7.5 50 13 55 Q18.5 50 18.5 33" stroke="#a07c58" stroke-width="0.75" fill="none"/>
+      <circle cx="13" cy="27" r="1.8" fill="#bc9c6a" opacity="0.55"/>
+    </svg>
+    <!-- Rising dust -->
+    <div class="ldr-dust-rise">
+      <div class="ldr-dp"></div><div class="ldr-dp"></div><div class="ldr-dp"></div>
+      <div class="ldr-dp"></div><div class="ldr-dp"></div>
+    </div>
+    <!-- Velvet surface -->
+    <div class="ldr-velvet"></div>
+  </div>
+  <div class="ldr-brand">Jewellery <span>818</span></div>
+  <div class="ldr-tagline">Adorn every moment</div>
+</div>
+
+<!-- ROOM LIGHT -->
+<div id="roomlight">
+  <div class="rl-base"></div>
+  <div class="rl-ray" id="rlRay"></div>
+  <div class="rl-glow" id="rlGlow"></div>
+  <div class="rl-floor"></div>
+  <div class="rl-dust" id="rlDust"></div>
+</div>
+
+<!-- CHAIN -->
+<div id="chain">
+  <svg id="chainSvg" viewBox="0 0 20 1000" preserveAspectRatio="xMidYMin meet" fill="none"></svg>
+</div>
+
+<div id="content">
+
+  <nav>
+    <div class="nav-logo">Jewellery <span>818</span></div>
+    <ul class="nav-links">
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#occasions">Occasions</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Order</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-photo"></div>
+    <div class="hero-vig"></div>
+    <div class="hero-content">
+      <div class="hero-kicker"><span>Handcrafted · Nairobi</span></div>
+      <span class="hero-title">Jewellery</span>
+      <span class="hero-num">818</span>
+      <p class="hero-body">
+        Pieces made to be worn close to the skin —<br>
+        kept long after the occasion has passed.
+      </p>
+      <a href="#collections" class="hero-cta">View the Collection <span class="cta-arr">→</span></a>
+    </div>
+    <div class="hero-scroll-hint">
+      <span class="h-s-txt">Scroll</span>
+      <div class="h-s-line"></div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section id="statement">
+    <div class="stmt-watermark" aria-hidden="true">818</div>
+    <blockquote class="stmt-q rv">
+      <span class="stmt-rule"></span>
+      Jewellery is not decoration.<br>
+      It is the one thing you reach for<br>
+      when you want to feel like yourself.
+      <span class="stmt-attr">Jewellery 818</span>
+    </blockquote>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section id="collections">
+    <div class="col-hd">
+      <div>
+        <span class="s-label rv">The Collection</span>
+        <h2 class="s-title rv">Worn close.<br><em>Kept forever.</em></h2>
+      </div>
+      <p class="s-body rv">Each piece chosen for how it sits on skin — how it catches the light entering a room at dawn.</p>
     </div>
 
-    <nav>
-        <div class="nav-container">
-            <span class="logo">VG</span>
-            <div class="nav-right">
-                <button id="cart-btn" onclick="toggleCart()">Box (<span id="cart-count">0</span>)</button>
-            </div>
-        </div>
-    </nav>
-
-    <header>
-        <div class="hero-content">
-            <span class="s-label">Established in Nairobi</span>
-            <h1 class="hero-title">Timeless Gold. <br><em>Modern Souls.</em></h1>
-        </div>
-    </header>
-
-    <section id="collections">
-        <div class="col-hd">
-            <span class="s-label">The Selection</span>
-            <h2 class="s-title">Worn close.<br><em>Kept forever.</em></h2>
-        </div>
-
-        <div class="prow L">
-            <div class="pi ig-frame">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVFs9VXjJjs/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="pn">
-                <span class="p-idx">01 / 04</span>
-                <span class="p-name">Signature Glow</span>
-                <span class="p-note">The foundation of every jewellery box. Timeless, high-polish hoops.</span>
-                <span class="p-price">KES 1,400</span>
-                <button class="add-to-cart" onclick="addToCart('Signature Glow Hoops', 1400)">Add to Box</button>
-            </div>
-        </div>
-
-        <div class="prow R">
-            <div class="pn">
-                <span class="p-idx">02 / 04</span>
-                <span class="p-name">The Everyday Trio</span>
-                <p class="p-note">Select your favorite from this set:</p>
-                <div class="multi-shop">
-                    <div class="shop-item"><span>Zuri Hoops — 1,400</span> <button class="mini-add" onclick="addToCart('Zuri Hoops', 1400)">+</button></div>
-                    <div class="shop-item"><span>Wendo Hoops — 1,200</span> <button class="mini-add" onclick="addToCart('Wendo Hoops', 1200)">+</button></div>
-                    <div class="shop-item"><span>Nia Hoops — 1,400</span> <button class="mini-add" onclick="addToCart('Nia Hoops', 1400)">+</button></div>
-                </div>
-            </div>
-            <div class="pi ig-frame">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVK6UtGDOEJ/" data-instgrm-version="14"></blockquote>
-            </div>
-        </div>
-
-        <div class="prow L">
-            <div class="pi ig-frame">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVK7IuxDCxA/" data-instgrm-version="14"></blockquote>
-            </div>
-            <div class="pn">
-                <span class="p-idx">03 / 04</span>
-                <span class="p-name">Architectural Hoops</span>
-                <p class="p-note">Bolder textures for a sophisticated edge:</p>
-                <div class="multi-shop">
-                    <div class="shop-item"><span>Alwa Edge — 1,400</span> <button class="mini-add" onclick="addToCart('Alwa Edge', 1400)">+</button></div>
-                    <div class="shop-item"><span>Malaika Twist — 1,500</span> <button class="mini-add" onclick="addToCart('Malaika Twist', 1500)">+</button></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="prow R">
-            <div class="pn">
-                <span class="p-idx">04 / 04</span>
-                <span class="p-name">The Essential Drop</span>
-                <span class="p-note">The perfect weight and shine for daily wear.</span>
-                <span class="p-price">KES 1,300</span>
-                <button class="add-to-cart" onclick="addToCart('Essential Drop', 1300)">Add to Box</button>
-            </div>
-            <div class="pi ig-frame">
-                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVK7dICjA9y/" data-instgrm-version="14"></blockquote>
-            </div>
-        </div>
-    </section>
-
-    <div id="cart-sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h3>Your Selection</h3>
-            <button onclick="toggleCart()">Close</button>
-        </div>
-        <div id="cart-items"></div>
-        <div class="sidebar-footer">
-            <div class="total-row"><span>Total:</span> <span id="cart-total">KES 0</span></div>
-            <button class="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
-        </div>
+    <div class="prow L rv">
+      <div class="pi"><div class="pi-inner"></div></div>
+      <div class="pn">
+        <span class="p-idx">01 / 05</span>
+        <span class="p-name">Golden Teardrop Pendant</span>
+        <span class="p-note">For the woman who wears gold like it belongs to her.</span>
+        <span class="p-price">KES 1,800</span>
+      </div>
     </div>
 
-    <script async src="//www.instagram.com/embed.js"></script>
-    <script>
-        // Loader delay for Instagram
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => document.getElementById('loader').style.display = 'none', 500);
-            }, 3000);
-        });
+    <div class="prow R rv">
+      <div class="pn">
+        <span class="p-idx">02 / 05</span>
+        <span class="p-name">Ruby Kiss Bracelet</span>
+        <span class="p-note">Thin enough to forget. Warm enough to remember.</span>
+        <span class="p-price">KES 2,500</span>
+      </div>
+      <div class="pi"><div class="pi-inner"></div></div>
+    </div>
 
-        // Cart Logic
-        let cart = [];
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateCartUI();
-            if(!document.getElementById('cart-sidebar').classList.contains('active')) toggleCart();
-        }
+    <div class="prow W rv">
+      <div class="pi"><div class="pi-inner"></div></div>
+      <div class="pn">
+        <span class="p-idx">03 / 05</span>
+        <span class="p-name">Layered Halo Ring</span>
+        <span class="p-note">Three bands. One intention.</span>
+        <span class="p-price">KES 2,000</span>
+      </div>
+    </div>
 
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+    <div class="prow R rv">
+      <div class="pn">
+        <span class="p-idx">04 / 05</span>
+        <span class="p-name">Wave Anklet</span>
+        <span class="p-note">Worn at the ankle where only some will notice.</span>
+        <span class="p-price">KES 1,500</span>
+      </div>
+      <div class="pi"><div class="pi-inner"></div></div>
+    </div>
 
-        function updateCartUI() {
-            document.getElementById('cart-count').innerText = cart.length;
-            const container = document.getElementById('cart-items');
-            container.innerHTML = cart.map((item, index) => `
-                <div class="cart-item">
-                    <span>${item.name}</span>
-                    <span>KES ${item.price}</span>
-                </div>
-            `).join('');
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('cart-total').innerText = `KES ${total}`;
-        }
+    <div class="prow L rv">
+      <div class="pi"><div class="pi-inner"></div></div>
+      <div class="pn">
+        <span class="p-idx">05 / 05</span>
+        <span class="p-name">Diamond Cut Choker</span>
+        <span class="p-note">For evenings that ask something of you.</span>
+        <span class="p-price">KES 3,200</span>
+      </div>
+    </div>
+  </section>
 
-        function checkout() {
-            const phoneNumber = "254123456789"; // REPLACE WITH YOUR NUMBER
-            let message = "Hello Velvet Gold! I'd like to order:\n\n";
-            cart.forEach(item => message += `- ${item.name} (KES ${item.price})\n`);
-            message += `\nTotal: KES ${cart.reduce((sum, item) => sum + item.price, 0)}`;
-            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`);
-        }
-    </script>
+  <!-- OCCASIONS -->
+  <section id="occasions">
+    <span class="s-label rv">For Every Chapter</span>
+    <h2 class="s-title rv">The right piece<br><em>for the moment.</em></h2>
+    <div class="occ-list">
+      <div class="occ-row rv d1"><span class="occ-n">01</span><div><span class="occ-name">Weddings &amp; Engagements</span><span class="occ-desc">Bridal sets, ceremony accents, and bridesmaid gifting — pieces that honour the beginning of forever.</span></div><div class="occ-price"><small>From</small>KES 3,500</div></div>
+      <div class="occ-row rv d2"><span class="occ-n">02</span><div><span class="occ-name">Graduations</span><span class="occ-desc">Something lasting for a moment you earned.</span></div><div class="occ-price"><small>From</small>KES 1,500</div></div>
+      <div class="occ-row rv d3"><span class="occ-n">03</span><div><span class="occ-name">Anniversaries</span><span class="occ-desc">Jewellery for a love that has grown. Proof that time was well spent.</span></div><div class="occ-price"><small>From</small>KES 2,000</div></div>
+      <div class="occ-row rv d4"><span class="occ-n">04</span><div><span class="occ-name">Birthdays</span><span class="occ-desc">Every age is an arrival. Gift something she'll still be wearing in ten years.</span></div><div class="occ-price"><small>From</small>KES 1,200</div></div>
+      <div class="occ-row rv d5"><span class="occ-n">05</span><div><span class="occ-name">Daily Wear</span><span class="occ-desc">Because Tuesday deserves to feel like something.</span></div><div class="occ-price"><small>From</small>KES 800</div></div>
+      <div class="occ-row rv d6"><span class="occ-n">06</span><div><span class="occ-name">Custom Orders</span><span class="occ-desc">A piece made with your intention behind it. DM us to begin.</span></div><div class="occ-price"><small>From</small>KES 2,000</div></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <span class="s-label rv">Investment</span>
+    <h2 class="s-title rv">What to expect<br><em>when you order.</em></h2>
+    <p class="s-body rv" style="margin-bottom:0">Quality that doesn't require negotiation.</p>
+    <div class="price-list">
+      <div class="pr-row rv d1"><span class="pr-name">Stud Earrings</span><span class="pr-val">KES 800 – 1,500</span></div>
+      <div class="pr-row rv d2"><span class="pr-name">Pendant Necklaces</span><span class="pr-val">KES 1,200 – 2,200</span></div>
+      <div class="pr-row rv d3"><span class="pr-name">Bracelets</span><span class="pr-val">KES 1,000 – 2,500</span></div>
+      <div class="pr-row rv d4"><span class="pr-name">Rings</span><span class="pr-val">KES 1,500 – 3,000</span></div>
+      <div class="pr-row rv d5"><span class="pr-name">Anklets</span><span class="pr-val">KES 900 – 1,800</span></div>
+      <div class="pr-row rv d6"><span class="pr-name">Full Sets</span><span class="pr-val">KES 3,500 – 6,500 <span class="pr-tag">Best value</span></span></div>
+      <div class="pr-row rv"><span class="pr-name">Custom</span><span class="pr-val">KES 2,000+ <span class="pr-tag">By arrangement</span></span></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-wm" aria-hidden="true">818</div>
+    <div class="contact-inner">
+      <h2 class="contact-title rv">Find<br>your piece.</h2>
+      <p class="contact-body rv">Order directly through Instagram. Tell us what you're looking for — we'll find it or make it.</p>
+      <div class="contact-links rv">
+        <a href="https://www.instagram.com/jewellery_818_" target="_blank" class="cl">Order on Instagram <span class="cl-arr">↗</span></a>
+        <a href="https://www.instagram.com/jewellery_818_" target="_blank" class="cl">View our work <span class="cl-arr">↗</span></a>
+      </div>
+      <span class="contact-handle rv">@jewellery_818_</span>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fl">Jewellery <span>818</span></div>
+    <ul class="fn">
+      <li><a href="#collections">Collections</a></li>
+      <li><a href="#occasions">Occasions</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="https://www.instagram.com/jewellery_818_" target="_blank">Instagram</a></li>
+    </ul>
+    <span class="fc">© 2025 Jewellery 818</span>
+  </footer>
+
+</div>
+
+<script>
+/* ── LOADER ── */
+(function(){
+  const loader = document.getElementById('loader');
+  setTimeout(() => {
+    loader.classList.add('ldr-out');
+    setTimeout(() => {
+      loader.style.display = 'none';
+      document.getElementById('chain').classList.add('show');
+    }, 1300);
+  }, 3900);
+})();
+
+/* ── CHAIN — delicate SVG links with mouse sway ── */
+(function(){
+  const svg = document.getElementById('chainSvg');
+  const h = 1000, lh = 9, cx = 10;
+  let html = '';
+  for(let y = 16; y < h - 16; y += lh){
+    const vert = Math.floor(y/lh) % 2 === 0;
+    if(vert){
+      html += `<ellipse cx="${cx}" cy="${y+lh/2}" rx="2" ry="${lh/2-0.6}" stroke="rgba(160,124,88,0.2)" stroke-width="0.65" fill="none"/>`;
+    } else {
+      html += `<ellipse cx="${cx}" cy="${y+lh/2}" rx="${lh/2-0.6}" ry="2" stroke="rgba(160,124,88,0.16)" stroke-width="0.55" fill="none"/>`;
+    }
+  }
+  svg.innerHTML = html;
+
+  let tX = 0, cX = 0;
+  const chainEl = document.getElementById('chain');
+  document.addEventListener('mousemove', e => {
+    const r = chainEl.getBoundingClientRect();
+    const dist = e.clientX - (r.left + r.width/2);
+    const prox = Math.max(0, 1 - Math.abs(dist)/200);
+    tX = prox * Math.sign(dist) * 5; // max 5px sway
+  });
+  (function swing(){
+    cX += (tX - cX) * 0.035; // very slow, like suspended weight
+    svg.style.transform = `translateX(${cX.toFixed(2)}px)`;
+    requestAnimationFrame(swing);
+  })();
+})();
+
+/* ── ROOM LIGHT — scroll-driven directional rays ── */
+(function(){
+  const ray  = document.getElementById('rlRay');
+  const glow = document.getElementById('rlGlow');
+  const dust = document.getElementById('rlDust');
+
+  function update(){
+    const p = Math.min(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight || 1), 1);
+    // Rays reveal slowly, stay subtle at peak
+    ray.style.opacity  = Math.min(1, p / 0.55);
+    glow.style.opacity = Math.min(0.85, Math.max(0, (p - 0.12) / 0.5));
+    dust.style.opacity = Math.min(0.75, Math.max(0, (p - 0.28) / 0.38));
+    // Rays shift angle slightly — light warming as morning progresses
+    const deg = p * 9;
+    ray.style.transform  = `rotate(${deg}deg)`;
+    glow.style.transform = `rotate(${deg * 0.55}deg)`;
+  }
+  window.addEventListener('scroll', update, { passive:true });
+  update();
+})();
+
+/* ── SCROLL REVEAL ── */
+(function(){
+  const els = document.querySelectorAll('.rv');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07 });
+  els.forEach(el => obs.observe(el));
+})();
+</script>
 </body>
 </html>
